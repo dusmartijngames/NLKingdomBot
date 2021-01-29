@@ -1,0 +1,7 @@
+./transcripts/
+./build/
+./.idea/
+./.gradle/
+.env
+database.db
+/gradle/
