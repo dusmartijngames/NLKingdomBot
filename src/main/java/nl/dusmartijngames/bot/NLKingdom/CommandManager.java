@@ -39,6 +39,7 @@ public class CommandManager {
         //moderator commands
 
         //admin commands
+        addCommand(new EmbedCommand());
         addCommand(new RoleChannelCommand());
         addCommand(new SendRolesCommand());
         addCommand(new SetRolesCommand());
@@ -49,6 +50,7 @@ public class CommandManager {
         addCommand(new GetTranscriptCommand());
         addCommand(new NewTicketCommand());
         addCommand(new RemoveMemberCommand());
+        addCommand(new RenameTicketCommand());
         addCommand(new SupportEmbedCommand());
 
     }

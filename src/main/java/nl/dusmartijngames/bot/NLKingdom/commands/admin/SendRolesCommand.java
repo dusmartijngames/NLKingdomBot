@@ -15,7 +15,6 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.TimeZone;
 
 public class SendRolesCommand implements ICommand {
     @Override
@@ -39,7 +38,7 @@ public class SendRolesCommand implements ICommand {
         long roleChannelId = DatabaseManager.INSTANCE.getRoleChannel(event.getGuild().getIdLong());
 
         if (roleChannelId == 0) {
-            channel.sendMessage("Het roles kanaal is nog niet ingesteld. gebruik eerst !src <#kanaal> en probeer het dan opnieuw").queue();
+            channel.sendMessage("Het roles kanaal is nog niet ingesteld. gebruik eerst *src <#kanaal> en probeer het dan opnieuw").queue();
             return;
         }
 
@@ -48,13 +47,14 @@ public class SendRolesCommand implements ICommand {
         List<Long> roles = DatabaseManager.INSTANCE.getRoles(event.getGuild().getIdLong());
 
         if (roles.isEmpty()) {
-            channel.sendMessage("Geen rollen gevonden. gebruik !setroles add <@role> <:emote:> om een rol toe te voegen").queue();
+            channel.sendMessage("Geen rollen gevonden. gebruik *setroles add <@role> <:emote:> om een rol toe te voegen").queue();
             return;
         }
 
         eb.setTitle("Keuze Rollen")
+                .addField("Selecteer aub het vinkje om te verifieren dat je een mens bent!", "", true)
                 .setTimestamp(LocalDateTime.now().atZone(ZoneId.systemDefault()))
-                .setColor(Color.decode("#0083DA"))
+                .setColor(Color.decode("#3498DB"))
                 .setThumbnail(event.getGuild().getIconUrl());
 
 
@@ -84,7 +84,7 @@ public class SendRolesCommand implements ICommand {
 
     @Override
     public String getHelp(CommandContext event) {
-        return "null";
+        return "Stuurt een embed met de reaction roles";
     }
 
     @Override

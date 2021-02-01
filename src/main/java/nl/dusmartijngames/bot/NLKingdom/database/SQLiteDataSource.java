@@ -68,7 +68,7 @@ public class SQLiteDataSource implements DatabaseManager {
             // language=MySQL
             statement.execute("CREATE TABLE IF NOT EXISTS support_tickets(" +
                     "id INTEGER PRIMARY KEY AUTO_INCREMENT," +
-                    "guild_id VARCHAR(20) NOT NULL UNIQUE, " +
+                    "guild_id VARCHAR(20) NOT NULL, " +
                     "owner_id varchar(20) NOT NULL," +
                     "channel_id varchar(20) NOT NULL," +
                     "status BOOL NOT NULL," +
@@ -569,6 +569,28 @@ public class SQLiteDataSource implements DatabaseManager {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean isActiveTicker(int ticketId) {
+        try (Connection connection = getConnection()) {
+            final PreparedStatement preparedStatement = connection
+                    // language=MySQL
+                    .prepareStatement("SELECT status FROM support_tickets where id = ? ");
+
+            preparedStatement.setInt(1, ticketId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return false;
     }
 
     public Connection getConnection() throws SQLException {

@@ -41,11 +41,16 @@ public class CloseTicketCommand implements ICommand {
             }
             transcript.close();
 
-
+            if (!DatabaseManager.INSTANCE.isActiveTicker(id)) {
+                channel.sendMessage("Ticket is al geclosed").queue();
+                return;
+            }
             logChannel.sendMessage("Ticket " + channel.getName() + " has been closed by: " + member.getEffectiveName()).addFile(newfile).queue(l -> {
                 String url = l.getAttachments().get(0).getUrl();
                 DatabaseManager.INSTANCE.setTicketActive(guild.getIdLong(), channel.getIdLong(), false, url);
             });
+
+            channel.delete().queue();
         } catch (IOException e) {
             e.printStackTrace();
         }

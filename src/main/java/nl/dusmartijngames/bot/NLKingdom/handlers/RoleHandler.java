@@ -23,7 +23,13 @@ public class RoleHandler extends ListenerAdapter {
             return;
         }
 
+        if (event.getReactionEmote().isEmoji()) {
+            return;
+        }
         long emoteId = event.getReactionEmote().getIdLong();
+        if (emoteId == 0) {
+            return;
+        }
         Emote emote = event.getGuild().getEmoteById(emoteId);
 
         if (emote == null) {
@@ -67,6 +73,7 @@ public class RoleHandler extends ListenerAdapter {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle("Keuze Rollen")
+                .addField("Selecteer aub het vinkje om te verifieren dat je een mens bent!\n", "", true)
                 .setTimestamp(LocalDateTime.now().atZone(ZoneId.systemDefault()))
                 .setColor(Color.decode("#0083DA"))
                 .setThumbnail(event.getGuild().getIconUrl());

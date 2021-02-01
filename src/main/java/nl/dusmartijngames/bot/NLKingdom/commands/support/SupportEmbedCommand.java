@@ -23,13 +23,12 @@ public class SupportEmbedCommand implements ICommand {
         }
 
         EmbedBuilder eb = new EmbedBuilder();
-        Emote emote = event.getJDA().getEmoteById(Config.getLong("emoteid"));
 
         eb.setTitle("Een ticket aanmaken!")
                 .addField("", "Klik op de emoji onder dit bericht om een ticket aan te maken.", false);
 
         channel.sendMessage(eb.build()).queue(m -> {
-            m.addReaction(emote).queue();
+            m.addReaction("\uD83D\uDCE9").queue();
             DatabaseManager.INSTANCE.setSupportMessage(event.getGuild().getIdLong(), m.getIdLong());
         });
 

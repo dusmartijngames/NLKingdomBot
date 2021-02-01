@@ -27,5 +27,6 @@ public interface DatabaseManager {
     String getPrefix(long guildId);
     void setPrefix(long guildId, String newPrefix);
     String getTranscript(int ticketId);
+    boolean isActiveTicker(int ticketId);
 
 }

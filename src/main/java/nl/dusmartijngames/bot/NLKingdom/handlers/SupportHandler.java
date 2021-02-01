@@ -28,7 +28,7 @@ public class SupportHandler extends ListenerAdapter {
             DatabaseManager.INSTANCE.setSupportTicket(event.getGuild().getIdLong(), member.getIdLong(), c.getIdLong());
             EmbedBuilder eb = new EmbedBuilder().setTitle("Welkom " + member.getEffectiveName())
                     .addField("", "Bedankt voor het openen van een support ticket. Over enkele momenten zou er iemand van ons " + supportRole.getAsMention() + " team jou te hulp staan\n" +
-                            "Tiep alvast je vraag uit want dat scheelt best wat tijd", false);
+                            "Typ alvast je vraag uit want dat scheelt best wat tijd", false);
             c.sendMessage(eb.build()).queue();
 
             c.sendMessage(supportRole.getAsMention()).queue(m -> {
@@ -36,7 +36,10 @@ public class SupportHandler extends ListenerAdapter {
             });
 
             int id = DatabaseManager.INSTANCE.getTicketId(event.getGuild().getIdLong(), c.getIdLong());
-            c.getManager().setName(id + "-" + member.getEffectiveName()).queue();
+
+            String name = id + "-" + member.getEffectiveName();
+            name = name.replace(" ", "-");
+            c.getManager().setName(name).queue();
         });
     }
 

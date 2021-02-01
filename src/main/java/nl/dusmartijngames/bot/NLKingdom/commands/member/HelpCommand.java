@@ -30,11 +30,11 @@ public class HelpCommand implements ICommand {
         String prefix = Constants.PREFIX;
 
         if (args.isEmpty()) {
-            builder.setTitle("Help command").setColor(Color.decode("#2B7FA8"))
+            builder.setTitle("Help command").setColor(Color.decode("#3498DB"))
                     .setThumbnail(ctx.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl())
                     .setTimestamp(LocalDateTime.now(Clock.systemUTC()))
                     .setFooter(ctx.getMember().getEffectiveName() + " did " + prefix + "help at", ctx.getMember().getUser().getEffectiveAvatarUrl())
-                    .addField("Categories:", "Admin, Mod, Member, Music, Other", true);
+                    .addField("Categories:", "Admin, Member, Support", true);
 
             ICommand help = manager.getCommand("help");
             builder.addField(prefix + help.getName(), help.getHelp(ctx), false);
@@ -44,7 +44,7 @@ public class HelpCommand implements ICommand {
 
         String category = args.get(0).toLowerCase();
 
-        builder.setTitle("Commands in the " + category + " category").setColor(Color.decode("#2B7FA8"))
+        builder.setTitle("Commands in the " + category + " category").setColor(Color.decode("#3498DB"))
                 .setThumbnail(ctx.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl())
                 .setTimestamp(LocalDateTime.now(Clock.systemUTC()))
                 .setFooter(ctx.getMember().getEffectiveName() + " did " + prefix + "help at", ctx.getMember().getUser().getEffectiveAvatarUrl());

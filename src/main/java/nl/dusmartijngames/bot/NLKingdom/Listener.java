@@ -23,9 +23,8 @@ public class Listener extends ListenerAdapter {
 
        System.out.printf("%s Logged in as %#s\n", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME) ,event.getJDA().getSelfUser());
 
-       event.getJDA().getGuildById(612189253824151552L).getTextChannelById(771454723353870418L).sendMessageFormat("%s Started.",
-               event.getJDA().getSelfUser().getName()).queue();
-        DatabaseManager.INSTANCE.init();
+       DatabaseManager.INSTANCE.init();
+       System.out.println("Done! (5,690s)! For help, type \"help\" or \"?\" ");
     }
 
     @Override

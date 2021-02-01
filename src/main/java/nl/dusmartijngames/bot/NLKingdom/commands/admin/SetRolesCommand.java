@@ -27,7 +27,7 @@ public class SetRolesCommand implements ICommand {
         }
 
         if(args.isEmpty() || roles.isEmpty()) {
-            channel.sendMessage("Invalid arguments. usage: `!" + getName() + " <mode> <role> [emote]`\n" +
+            channel.sendMessage("Invalid arguments. usage: `*" + getName() + " <mode> <role> [emote]`\n" +
                     "modes: add, update, remove").queue();
             return;
         }
@@ -40,7 +40,7 @@ public class SetRolesCommand implements ICommand {
         }
 
         if(emotes.isEmpty()) {
-            channel.sendMessage("Invalid arguments. usage: `!" + getName() + " <mode> <role> [emote]`\n" +
+            channel.sendMessage("Invalid arguments. usage: `*" + getName() + " <mode> <role> [emote]`\n" +
                     "modes: add, update, remove").queue();
             return;
         }
@@ -102,7 +102,6 @@ public class SetRolesCommand implements ICommand {
 
     public void updateRolesEmotes(Long guildId, Long roleId, Long emoteId) {
         DatabaseManager.INSTANCE.updateRoles(guildId, roleId,  emoteId);
-
     }
 
     public void addRolesEmotes(Long guildId, Long roleId, Long emoteId) {
@@ -116,8 +115,8 @@ public class SetRolesCommand implements ICommand {
 
     @Override
     public String getHelp(CommandContext event) {
-        return "Sets the roles for role assignment\n" +
-                "usage:  !" + getName() + " <mode> <role> [emote]";
+        return "Zet de rollen voor de reaction roles in de database\n" +
+                "gebruik:  !" + getName() + " <mode> <role> [emote]";
     }
 
     @Override

@@ -30,7 +30,7 @@ public class RoleChannelCommand implements ICommand {
                 TextChannel newChannel = channels.get(0);
                 updateChannel(event.getGuild().getIdLong(), newChannel.getIdLong());
 
-                channel.sendMessageFormat("Role Assignment channel has been set to %s", newChannel.getAsMention()).queue();
+                channel.sendMessageFormat("Verificatie kanaal is gezet naar %s", newChannel.getAsMention()).queue();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -52,7 +52,7 @@ public class RoleChannelCommand implements ICommand {
 
     @Override
     public String getHelp(CommandContext event) {
-        return "Sets the channel for roleassignment to the channel you wish";
+        return "Zet het kanaal waar je het verificatie bericht wilt sturen";
     }
 
     @Override

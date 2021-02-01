@@ -23,8 +23,9 @@ public class AddMemberTicketCommand implements ICommand {
         Member selfMember = event.getGuild().getSelfMember();
         Role supportRole = event.getGuild().getRoleById(Config.getLong("supportRoleId"));
         List<Member> mentionedMembers = event.getMessage().getMentionedMembers();
+        List<Role> roles = event.getMessage().getMentionedRoles();
 
-        if(!member.getRoles().contains(supportRole)) {
+        if(member.getRoles().get(0).getPositionRaw() < supportRole.getPositionRaw()) {
             channel.sendMessage("Je mag dit commando niet uitvoeren").queue();
             return;
         }
@@ -39,19 +40,27 @@ public class AddMemberTicketCommand implements ICommand {
             throw new MissingAccessException(channel, Permission.MANAGE_CHANNEL);
         }
 
-        if (mentionedMembers.isEmpty()) {
-            channel.sendMessage("Je hebt geen gebruiker genoemt. gebruik !add <@gebruiker>").queue();
+        if (mentionedMembers.isEmpty() && roles.isEmpty()) {
+            channel.sendMessage("Je hebt geen gebruiker of role genoemt. gebruik *add <@gebruiker>").queue();
             return;
         }
 
-        Member addMember = mentionedMembers.get(0);
-
         EnumSet<Permission> allow = EnumSet.of(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_ADD_REACTION);
         EnumSet<Permission> deny = EnumSet.of(Permission.MANAGE_CHANNEL);
-        manager.putPermissionOverride(addMember, allow, deny).queue();
-        channel.sendMessage(addMember.getEffectiveName() + " Is toegevoegd aan dit support ticket").queue();
+        Role addRole;
+        Member addMember;
+
+        if (!roles.isEmpty()) {
+            addRole = roles.get(0);;
+            manager.putPermissionOverride(addRole, allow, deny).queue();
+            channel.sendMessage("Role " + addRole.getName() + " Is toegevoegd aan dit support ticket").queue();
+        } else {
+            addMember = mentionedMembers.get(0);
 
 
+            manager.putPermissionOverride(addMember, allow, deny).queue();
+            channel.sendMessage(addMember.getEffectiveName() + " Is toegevoegd aan dit support ticket").queue();
+        }
     }
 
     @Override

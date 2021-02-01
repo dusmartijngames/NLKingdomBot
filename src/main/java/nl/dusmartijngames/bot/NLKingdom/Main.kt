@@ -1,15 +1,11 @@
 package nl.dusmartijngames.bot.NLKingdom
 
-import com.jagrosh.jdautilities.command.CommandClientBuilder
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
-import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
-import nl.dusmartijngames.bot.NLKingdom.commands.admin.EmbedCommand
-import nl.dusmartijngames.bot.NLKingdom.config.Config;
+import nl.dusmartijngames.bot.NLKingdom.config.Config
 import nl.dusmartijngames.bot.NLKingdom.handlers.RoleHandler
 import nl.dusmartijngames.bot.NLKingdom.handlers.SupportHandler
 import java.io.File
@@ -28,12 +24,11 @@ class Main {
         val listener = Listener(commandManager)
         val supportHandler = SupportHandler();
         val roleHandler = RoleHandler()
-        val waiter = EventWaiter()
 
         try {
             println("$currentTime Booting")
-            val jda = JDABuilder.createDefault(
-                Config.get("token2"),
+            JDABuilder.createDefault(
+                Config.get("token"),
                 GatewayIntent.GUILD_MEMBERS,
                 GatewayIntent.DIRECT_MESSAGES,
                 GatewayIntent.GUILD_MESSAGE_REACTIONS,
@@ -47,18 +42,7 @@ class Main {
                 .addEventListeners(roleHandler)
                 .addEventListeners(supportHandler)
                 .setStatus(OnlineStatus.ONLINE)
-                .setActivity(Activity.watching("over the server"))
                 .build().awaitReady()
-
-            val builder = CommandClientBuilder()
-
-            builder.setPrefix(Config.get("prefix"))
-            builder.setOwnerId("229633170004246530")
-            builder.addCommand(EmbedCommand(waiter))
-
-            val client = builder.build()
-
-            jda.addEventListener(client)
 
             var file = File("transcripts/")
 

@@ -23,7 +23,7 @@ public class SuggestCommand implements ICommand {
         TextChannel channel = event.getChannel();
 
         if (args.isEmpty()) {
-            channel.sendMessage("Ik mis een suggestie. !suggest <suggestie>").queue();
+            channel.sendMessage("Ik mis een suggestie. *suggest <suggestie>").queue();
             return;
         }
 
@@ -51,7 +51,7 @@ public class SuggestCommand implements ICommand {
 
     @Override
     public String getHelp(CommandContext event) {
-        return "Gebuik !suggest <suggestie> om een suggestie ";
+        return "Gebuik *suggest <suggestie> om een suggestie ";
     }
 
     @Override

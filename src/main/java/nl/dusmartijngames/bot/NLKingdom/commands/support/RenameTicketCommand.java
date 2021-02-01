@@ -13,11 +13,13 @@ import nl.dusmartijngames.bot.NLKingdom.objects.ICommand;
 
 import java.util.List;
 
-public class GetTranscriptCommand implements ICommand {
+public class RenameTicketCommand implements ICommand {
     @Override
     public void handle(CommandContext event) {
         Member member = event.getMember();
         TextChannel channel = event.getChannel();
+        ChannelManager manager = channel.getManager();
+        Member selfMember = event.getGuild().getSelfMember();
         Role supportRole = event.getGuild().getRoleById(Config.getLong("supportRoleId"));
         List<String> args = event.getArgs();
 
@@ -26,25 +28,36 @@ public class GetTranscriptCommand implements ICommand {
             return;
         }
 
-        if (args.isEmpty()) {
-            channel.sendMessage("Niet genoeg argumenten. gebruik *gettranscript <id>").queue();
+        if(!DatabaseManager.INSTANCE.isTicket(event.getGuild().getIdLong(), channel.getIdLong())) {
+            channel.sendMessage("Dit commando kan alleen worden uitgevoerd in een support ticket").queue();
             return;
         }
 
-        String idString = String.join("", args);
-        int id = Integer.parseInt(idString);
+        if (!selfMember.hasPermission(Permission.MANAGE_CHANNEL)) {
+            event.getChannel().sendMessage( new MissingAccessException(channel, Permission.MANAGE_CHANNEL).getMessage()).queue();
+            throw new MissingAccessException(channel, Permission.MANAGE_CHANNEL);
+        }
 
-        channel.sendMessage(DatabaseManager.INSTANCE.getTranscript(id)).queue();
+        if (args.isEmpty()) {
+            channel.sendMessage("Geef een naam op. gebruik *rename <nieuwe naam>").queue();
+            return;
+        }
+
+        String name = String.join(" ", args);
+        name = name.replace(" ", "-");
+
+        manager.setName(name).queue();
+        channel.sendMessage("Naam van dit ticket is gezet naar " + name ).queue();
     }
 
     @Override
     public String getName() {
-        return "gettranscript";
+        return "rename";
     }
 
     @Override
     public String getHelp(CommandContext event) {
-        return "stuurt een link naar de transcript file van een ticket.";
+        return "";
     }
 
     @Override
