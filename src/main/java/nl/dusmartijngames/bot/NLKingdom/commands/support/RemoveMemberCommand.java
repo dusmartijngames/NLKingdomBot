@@ -1,5 +1,6 @@
 package nl.dusmartijngames.bot.NLKingdom.commands.support;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -11,6 +12,9 @@ import nl.dusmartijngames.bot.NLKingdom.database.DatabaseManager;
 import nl.dusmartijngames.bot.NLKingdom.objects.CommandContext;
 import nl.dusmartijngames.bot.NLKingdom.objects.ICommand;
 
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -49,17 +53,24 @@ public class RemoveMemberCommand implements ICommand {
         EnumSet<Permission> deny = EnumSet.allOf(Permission.class);
         Role removeRole;
         Member removeMember;
+        event.getMessage().delete().queue();
+        EmbedBuilder eb = new EmbedBuilder().setTimestamp(LocalDateTime.now().atZone(ZoneId.systemDefault()))
+                .setColor(Color.decode("#3498DB"))
+                .setFooter("© NLKingdom | Reborn")
+                .setThumbnail(event.getGuild().getIconUrl());
 
         if (!roles.isEmpty()) {
             removeRole = roles.get(0);;
             manager.putPermissionOverride(removeRole, allow, deny).queue();
-            channel.sendMessage("Role " + removeRole.getName() + " Is verwijderd van dit support ticket").queue();
+            eb.setTitle("Rol verwijderd").addField("", "Rol " + removeRole.getName() + " is verwijderd van dit support ticket", false);
+            channel.sendMessage(eb.build()).queue();
         } else {
             removeMember = mentionedMembers.get(0);
 
 
             manager.putPermissionOverride(removeMember, allow, deny).queue();
-            channel.sendMessage(removeMember.getEffectiveName() + " Is verwijderd van dit support ticket").queue();
+            eb.setTitle("Speler verwijderd").addField("", "Speler " + removeMember.getEffectiveName() + " is verwijderd van dit support ticket", false);
+            channel.sendMessage(eb.build()).queue();
         }
     }
 
@@ -70,7 +81,7 @@ public class RemoveMemberCommand implements ICommand {
 
     @Override
     public String getHelp(CommandContext event) {
-        return "Verwijder een gebruiker uit het huidige ticket.";
+        return "Verwijder een gebruiker of rol uit het huidige ticket.";
     }
 
     @Override

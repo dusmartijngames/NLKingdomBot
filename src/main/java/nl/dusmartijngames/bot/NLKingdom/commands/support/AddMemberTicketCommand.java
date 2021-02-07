@@ -1,5 +1,6 @@
 package nl.dusmartijngames.bot.NLKingdom.commands.support;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -11,6 +12,9 @@ import nl.dusmartijngames.bot.NLKingdom.database.DatabaseManager;
 import nl.dusmartijngames.bot.NLKingdom.objects.CommandContext;
 import nl.dusmartijngames.bot.NLKingdom.objects.ICommand;
 
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -49,17 +53,24 @@ public class AddMemberTicketCommand implements ICommand {
         EnumSet<Permission> deny = EnumSet.of(Permission.MANAGE_CHANNEL);
         Role addRole;
         Member addMember;
+        EmbedBuilder eb = new EmbedBuilder().setTimestamp(LocalDateTime.now().atZone(ZoneId.systemDefault()))
+                .setColor(Color.decode("#3498DB"))
+                .setFooter("© NLKingdom | Reborn")
+                .setThumbnail(event.getGuild().getIconUrl());
+        event.getMessage().delete().queue();
 
         if (!roles.isEmpty()) {
             addRole = roles.get(0);;
             manager.putPermissionOverride(addRole, allow, deny).queue();
-            channel.sendMessage("Role " + addRole.getName() + " Is toegevoegd aan dit support ticket").queue();
+            eb.setTitle("Rol toegevoegd").addField("", "Role " + addRole.getName() + " is toegevoegd aan dit support ticket", false);
+            channel.sendMessage(eb.build()).queue();
         } else {
             addMember = mentionedMembers.get(0);
 
 
             manager.putPermissionOverride(addMember, allow, deny).queue();
-            channel.sendMessage(addMember.getEffectiveName() + " Is toegevoegd aan dit support ticket").queue();
+            eb.setTitle("Speler toegevoegd").addField("", "Speler " + addMember.getEffectiveName() + " is toegevoegd aan dit support ticket", false);
+            channel.sendMessage(eb.build()).queue();
         }
     }
 

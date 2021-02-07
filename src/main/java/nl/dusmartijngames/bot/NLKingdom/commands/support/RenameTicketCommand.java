@@ -1,5 +1,6 @@
 package nl.dusmartijngames.bot.NLKingdom.commands.support;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -11,6 +12,9 @@ import nl.dusmartijngames.bot.NLKingdom.database.DatabaseManager;
 import nl.dusmartijngames.bot.NLKingdom.objects.CommandContext;
 import nl.dusmartijngames.bot.NLKingdom.objects.ICommand;
 
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 public class RenameTicketCommand implements ICommand {
@@ -45,9 +49,15 @@ public class RenameTicketCommand implements ICommand {
 
         String name = String.join(" ", args);
         name = name.replace(" ", "-");
-
+        event.getMessage().delete().queue();
+        EmbedBuilder eb = new EmbedBuilder().setTimestamp(LocalDateTime.now().atZone(ZoneId.systemDefault()))
+                .setColor(Color.decode("#3498DB"))
+                .setFooter("© NLKingdom | Reborn")
+                .setThumbnail(event.getGuild().getIconUrl())
+                .setTitle("Naam veranderd")
+                .addField("", "Naam van dit ticket is veranderd naar " + name, false);
         manager.setName(name).queue();
-        channel.sendMessage("Naam van dit ticket is gezet naar " + name ).queue();
+        channel.sendMessage(eb.build()).queue();
     }
 
     @Override
@@ -57,7 +67,7 @@ public class RenameTicketCommand implements ICommand {
 
     @Override
     public String getHelp(CommandContext event) {
-        return "";
+        return "Verander de naam van het huidige ticket";
     }
 
     @Override
